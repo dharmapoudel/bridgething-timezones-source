@@ -1,0 +1,42 @@
+{
+  "$schema": "https://apps.bridgething.com/schemas/catalog/v1.json",
+  "schema": "catalog.v1",
+  "updated_at": "2026-09-19T13:19:22.523Z",
+  "repo": {
+    "name": "Bridgething Timezones",
+    "description": "Timezones for the Spotify Car Thing: world clock timelines with an overlap finder.",
+    "homepage": "https://github.com/dharmapoudel/bridgething-timezones-source",
+    "icon": null
+  },
+  "apps": [
+    {
+      "id": "6aadfb91-01a0-7063-888b-e551ca7b4771",
+      "name": "Timezones",
+      "description": "World clock grid in the style of worldtimebuddy. The knob moves the time line; the window slides as you scroll.",
+      "author": "Dharma Poudel",
+      "icon": "https://dharmapoudel.github.io/bridgething-timezones-source/icons/6aadfb91-01a0-7063-888b-e551ca7b4771.png",
+      "screenshots": [
+        "https://dharmapoudel.github.io/bridgething-timezones-source/screenshots/6aadfb91-01a0-7063-888b-e551ca7b4771/01.png",
+        "https://dharmapoudel.github.io/bridgething-timezones-source/screenshots/6aadfb91-01a0-7063-888b-e551ca7b4771/02.png",
+        "https://dharmapoudel.github.io/bridgething-timezones-source/screenshots/6aadfb91-01a0-7063-888b-e551ca7b4771/03.png"
+      ],
+      "homepage": "https://github.com/dharmapoudel/bridgething-timezones",
+      "source": "https://github.com/dharmapoudel/bridgething-timezones",
+      "versions": [
+        {
+          "version": "0.3.1",
+          "released_at": "2026-09-19T13:19:22.519Z",
+          "download": {
+            "url": "https://dharmapoudel.github.io/bridgething-timezones-source/r/6aadfb91-01a0-7063-888b-e551ca7b4771/0.3.1.zip",
+            "size": 824111,
+            "sha256": "be651e425f1545f94d6526b77bdae734b7c91a4007e331820b2ab73d18041e15"
+          },
+          "permissions": [],
+          "min_libbridgething_version": "0.12.1",
+          "changelog": null
+        }
+      ]
+    }
+  ],
+  "recommended_sources": []
+}
