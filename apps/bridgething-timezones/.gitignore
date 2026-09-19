@@ -4,3 +4,5 @@ dist
 .DS_Store
 *.log
 .env*
+# vendored prebuilt shared lib (built from webapp-shared/src; CI has no network for its devDeps)
+!webapp-shared/dist/
