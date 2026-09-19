@@ -1,7 +1,7 @@
 {
   "$schema": "https://apps.bridgething.com/schemas/catalog/v1.json",
   "schema": "catalog.v1",
-  "updated_at": "2026-09-19T13:47:26.007Z",
+  "updated_at": "2026-09-19T13:57:16.759Z",
   "repo": {
     "name": "Bridgething Timezones",
     "description": "Timezones for the Spotify Car Thing: world clock timelines with an overlap finder.",
@@ -14,7 +14,7 @@
       "name": "Timezones",
       "description": "World clock grid in the style of worldtimebuddy. The knob moves the time line; the window slides as you scroll.",
       "author": "Dharma Poudel",
-      "icon": "https://dharmapoudel.github.io/bridgething-timezones-source/icons/6aadfb91-01a0-7063-888b-e551ca7b4771.png",
+      "icon": "https://dharmapoudel.github.io/bridgething-timezones-source/icons/6aadfb91-01a0-7063-888b-e551ca7b4771.svg",
       "screenshots": [
         "https://dharmapoudel.github.io/bridgething-timezones-source/screenshots/6aadfb91-01a0-7063-888b-e551ca7b4771/01.png",
         "https://dharmapoudel.github.io/bridgething-timezones-source/screenshots/6aadfb91-01a0-7063-888b-e551ca7b4771/02.png",
