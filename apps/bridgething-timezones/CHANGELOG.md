@@ -1,11 +1,11 @@
 # Changelog
 
-## 0.3.2 — 2026-09-19
+## 0.3.2
 
 - Fixed the app icon: back to the SVG Orbit icon. The 0.3.1 PNG rasterization
   didn't display; the SVG is what shipped (and worked) in 0.2.0/0.3.0.
 
-## 0.3.1 — 2026-09-19
+## 0.3.1
 
 - Code cleanup: extracted the shared zone-record parser used by JSON config
   and device storage; simplified the base-format ref.
@@ -16,7 +16,7 @@
 - Store assets: 800×480 screenshots (grid, overlap state, timezone picker)
   and a 1024×1024 PNG of the Orbit icon.
 
-## 0.3.0 — 2026-09-19
+## 0.3.0
 
 - **Timezone picker**: long-press any row label (550ms, same gesture as Radio
   Atlas) to open a region → zone picker with every IANA timezone, grouped by
@@ -32,7 +32,7 @@
 - Test seams: `?zones=` URL param overrides the companion config (headless
   testing only, not user-facing).
 
-## 0.2.0 — 2026-09-19
+## 0.2.0
 
 - **Day flick**: spinning the knob fast now jumps a day per detent instead of
   an hour, so reaching next week doesn't take 168 clicks.
@@ -43,7 +43,7 @@
 - Test seam: `?zones=` URL param overrides the companion config (headless
   testing only, not user-facing).
 
-## 0.1.0 — 2026-09-18
+## 0.1.0
 
 - Initial release. Worldtimebuddy-style hour grid ported from
   sspaeti/omarchy-timezones-plugin (MIT).
