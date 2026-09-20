@@ -1,7 +1,7 @@
 {
   "$schema": "https://apps.bridgething.com/schemas/catalog/v1.json",
   "schema": "catalog.v1",
-  "updated_at": "2026-09-19T13:57:16.759Z",
+  "updated_at": "2026-09-20T21:32:51.010Z",
   "repo": {
     "name": "Bridgething Timezones",
     "description": "Timezones for the Spotify Car Thing: world clock timelines with an overlap finder.",
@@ -33,7 +33,7 @@
           },
           "permissions": [],
           "min_libbridgething_version": "0.12.1",
-          "changelog": null
+          "changelog": "- Fixed the app icon: back to the SVG Orbit icon. The 0.3.1 PNG rasterization\n  didn't display; the SVG is what shipped (and worked) in 0.2.0/0.3.0."
         },
         {
           "version": "0.3.1",
@@ -45,7 +45,7 @@
           },
           "permissions": [],
           "min_libbridgething_version": "0.12.1",
-          "changelog": null
+          "changelog": "- Code cleanup: extracted the shared zone-record parser used by JSON config\n  and device storage; simplified the base-format ref.\n- Performance: grid cells and column headers are memoized — cursor moves and\n  the 15s clock tick no longer redo the wall-clock lookup for every cell;\n  timezone offsets are cached; the picker's per-zone times quantize to the\n  minute.\n- Store assets: 800×480 screenshots (grid, overlap state, timezone picker)\n  and a 1024×1024 PNG of the Orbit icon."
         }
       ]
     }
