@@ -6,6 +6,7 @@ import {
   zonesInRegion,
   type HourFormat,
 } from './model';
+import { usePortrait } from './usePortrait';
 
 export type PickerStage = { region: string | null };
 
@@ -25,6 +26,8 @@ type Props = {
 };
 
 export default function ZonePicker(p: Props) {
+  // the fixed-width modal would overflow the 480px portrait layout box
+  const portrait = usePortrait();
   const { regions, counts } = useMemo(() => {
     const rs = zoneRegions(p.allZones);
     const cs = new Map<string, number>();
@@ -49,7 +52,7 @@ export default function ZonePicker(p: Props) {
       data-picker="open"
     >
       <div
-        className="flex h-[400px] w-[620px] flex-col border border-rule bg-[#14171b] shadow-2xl"
+        className={`flex h-[400px] flex-col border border-rule bg-[#14171b] shadow-2xl ${portrait ? 'w-[440px]' : 'w-[620px]'}`}
         onClick={e => e.stopPropagation()}
       >
         {/* header */}

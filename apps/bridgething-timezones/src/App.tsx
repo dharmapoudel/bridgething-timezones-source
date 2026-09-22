@@ -2,6 +2,7 @@ import { BridgethingClient } from '@bridgething/client';
 import { daemonUrl } from '@bridgething/webapp-shared/daemon';
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ZonePicker, { type PickerStage } from './ZonePicker';
+import { usePortrait } from './usePortrait';
 import {
   DEFAULT_ZONES_CONFIG,
   HOUR_MS,
@@ -107,14 +108,16 @@ const RowCells = memo(function RowCells({
   zone,
   windowStart,
   labelMode,
+  cols,
 }: {
   zone: RowZone;
   windowStart: number;
   labelMode: HourFormat;
+  cols: number;
 }) {
   return (
     <>
-      {Array.from({ length: VISIBLE_COLS }, (_, c) => {
+      {Array.from({ length: cols }, (_, c) => {
         const colMs = (windowStart + c) * HOUR_MS;
         const cp = wallParts(zone.iana, colMs);
         const midnight = cp.hour === 0;
@@ -141,15 +144,17 @@ const ColumnHeaders = memo(function ColumnHeaders({
   rows,
   windowStart,
   labelMode,
+  cols,
 }: {
   homeIana: string;
   rows: RowZone[];
   windowStart: number;
   labelMode: HourFormat;
+  cols: number;
 }) {
   return (
     <>
-      {Array.from({ length: VISIBLE_COLS }, (_, c) => {
+      {Array.from({ length: cols }, (_, c) => {
         const colMs = (windowStart + c) * HOUR_MS;
         const p = wallParts(homeIana, colMs);
         const midnight = p.hour === 0;
@@ -193,6 +198,14 @@ export default function App() {
 
   const mode: HourFormat = fmtOverride ?? baseFormat;
   const labelMode: HourFormat = mode === '12h' ? '12h' : '24h';
+
+  // portrait (480x800 layout box) gets a narrower label column and fewer,
+  // roomier hour columns; landscape keeps the exact historic grid.
+  const portrait = usePortrait();
+  const labelColPx = portrait ? 120 : LABEL_COL_PX;
+  const visibleCols = portrait ? 6 : VISIBLE_COLS;
+  const visibleColsRef = useRef(visibleCols);
+  visibleColsRef.current = visibleCols;
 
   // companion config: zones + hour format, with live updates
   useEffect(() => {
@@ -267,6 +280,7 @@ export default function App() {
   }, []);
 
   const move = useCallback((dir: 1 | -1) => {
+    const cols = visibleColsRef.current;
     setView(v => {
       const now = Date.now();
       const cursorMs = Math.min(
@@ -277,7 +291,7 @@ export default function App() {
       // reaches the edge, the whole window slides so the cursor stays put.
       let windowStart = v.windowStart;
       let col = (cursorMs - windowStart * HOUR_MS) / HOUR_MS;
-      while (col >= VISIBLE_COLS) {
+      while (col >= cols) {
         windowStart += 1;
         col -= 1;
       }
@@ -288,6 +302,18 @@ export default function App() {
       return { cursorMs, windowStart };
     });
   }, []);
+
+  // rotation changes the column count; re-anchor the window so the cursor
+  // stays visible instead of sliding off the narrower grid.
+  const anchoredCols = useRef(visibleCols);
+  useEffect(() => {
+    if (anchoredCols.current === visibleCols) return;
+    anchoredCols.current = visibleCols;
+    setView(v => ({
+      cursorMs: v.cursorMs,
+      windowStart: Math.floor(v.cursorMs / HOUR_MS) - 2,
+    }));
+  }, [visibleCols]);
 
   const recenter = useCallback(() => {
     const n = Date.now();
@@ -523,27 +549,26 @@ export default function App() {
   ]);
 
   const cursorCol = (view.cursorMs - view.windowStart * HOUR_MS) / HOUR_MS;
-  const nowCol = (nowMs - view.windowStart * HOUR_MS) / HOUR_MS;
-  // the overlap badge only needs recomputing when the cursor hour or the
+  const nowCol = (nowMs - view.windowStart * HOUR_MS) / HOUR_MS;  // the overlap badge only needs recomputing when the cursor hour or the
   // zone list changes, not on every clock tick
   const cursorOverlap = useMemo(
     () => isOverlapAt(rows, view.cursorMs),
     [rows, view.cursorMs],
   );
-  const gridLeft = (frac: number) => `calc(${LABEL_COL_PX}px + (100% - ${LABEL_COL_PX}px) * ${frac / VISIBLE_COLS})`;
+  const gridLeft = (frac: number) => `calc(${labelColPx}px + (100% - ${labelColPx}px) * ${frac / visibleCols})`;
 
   const homeOffset = offsetMinutesAt(home.iana, view.cursorMs);
 
   return (
     <div className="flex h-full w-full flex-col bg-bg text-off-white select-none">
       {/* title bar */}
-      <div className="flex h-14 shrink-0 items-center justify-between px-6">
+      <div className={`flex h-14 shrink-0 items-center justify-between ${portrait ? 'px-4' : 'px-6'}`}>
         <div className="flex items-baseline gap-4">
           <span className="font-mono text-eyebrow tracking-[0.22em] text-dim uppercase">
             timezones
           </span>
           <span className="font-mono text-row text-near">{dateLabel(view.cursorMs, home.iana)}</span>
-          {cursorOverlap && (
+          {cursorOverlap && !portrait && (
             <span className="font-mono text-[10px] tracking-[0.16em] text-emerald-300 uppercase">
               ✓ overlap
             </span>
@@ -562,7 +587,7 @@ export default function App() {
       {/* column headers */}
       <div
         className="grid shrink-0 border-y border-rule"
-        style={{ gridTemplateColumns: `${LABEL_COL_PX}px repeat(${VISIBLE_COLS}, 1fr)` }}
+        style={{ gridTemplateColumns: `${labelColPx}px repeat(${visibleCols}, 1fr)` }}
       >
         <div className="h-9 bg-black/30" />
         <ColumnHeaders
@@ -570,6 +595,7 @@ export default function App() {
           rows={rows}
           windowStart={view.windowStart}
           labelMode={labelMode}
+          cols={visibleCols}
         />
       </div>
 
@@ -587,10 +613,10 @@ export default function App() {
               <div
                 key={z.iana + z.label}
                 className="grid min-h-0 flex-1 border-b border-rule/60"
-                style={{ gridTemplateColumns: `${LABEL_COL_PX}px repeat(${VISIBLE_COLS}, 1fr)` }}
+                style={{ gridTemplateColumns: `${labelColPx}px repeat(${visibleCols}, 1fr)` }}
               >
                 <div
-                  className="flex flex-col justify-center gap-0.5 bg-black/30 px-4 touch-none"
+                  className={`flex flex-col justify-center gap-0.5 bg-black/30 touch-none ${portrait ? 'px-3' : 'px-4'}`}
                   data-row-label={z.shortLabel}
                   onPointerDown={onLabelPointerDown}
                   onPointerMove={onLabelPointerMove}
@@ -612,14 +638,14 @@ export default function App() {
                     {[abbr, diff].filter(Boolean).join(' · ') || '—'}
                   </div>
                 </div>
-                <RowCells zone={z} windowStart={view.windowStart} labelMode={labelMode} />
+                <RowCells zone={z} windowStart={view.windowStart} labelMode={labelMode} cols={visibleCols} />
               </div>
             );
           })}
         </div>
 
         {/* now line */}
-        {nowCol >= 0 && nowCol < VISIBLE_COLS && (
+        {nowCol >= 0 && nowCol < visibleCols && (
           <div
             className="pointer-events-none absolute top-0 bottom-0 w-px bg-white/60"
             style={{ left: gridLeft(nowCol) }}
@@ -640,13 +666,17 @@ export default function App() {
       </div>
 
       {/* footer hints */}
-      <div className="flex h-7 shrink-0 items-center justify-between border-t border-rule px-6">
+      <div className={`flex h-7 shrink-0 items-center justify-between border-t border-rule ${portrait ? 'px-4' : 'px-6'}`}>
         <span className="font-mono text-[10px] tracking-[0.16em] text-dim uppercase">
-          knob · move · flick day&ensp;&ensp;press · now / overlap&ensp;&ensp;back · format
+          {portrait ? (
+            'knob · move · flick day · press · now · back · format'
+          ) : (
+            <>knob · move · flick day&ensp;&ensp;press · now / overlap&ensp;&ensp;back · format</>
+          )}
         </span>
         <span className="font-mono text-[10px] tracking-[0.16em] text-dim uppercase">
           {mode}
-          <span className="text-emerald-300/80"> · green = good for all</span>
+          {!portrait && <span className="text-emerald-300/80"> · green = good for all</span>}
         </span>
       </div>
 

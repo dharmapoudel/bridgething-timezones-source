@@ -3,7 +3,7 @@
     {
       "data": {
         "key": "zones",
-        "label": "Zones as Label=Zone pairs separated by ; \u2014 blank zone = this device. Optional (SHORT) sets the badge, e.g. Kathmandu (KTM)=Asia/Kathmandu. A JSON array also works."
+        "label": "Zones as Label=Zone pairs separated by ; — blank zone = this device. Optional (SHORT) sets the badge, e.g. Kathmandu (KTM)=Asia/Kathmandu. A JSON array also works."
       },
       "type": "string"
     },
@@ -25,5 +25,5 @@
   "icon": "icon.svg",
   "id": "6aadfb91-01a0-7063-888b-e551ca7b4771",
   "name": "Timezones",
-  "version": "0.3.2"
+  "version": "0.3.3"
 }

@@ -12,7 +12,7 @@
     },
     "apps/bridgething-timezones": {
       "name": "@dharmapoudel/webapp-timezones",
-      "version": "0.3.1",
+      "version": "0.3.3",
       "dependencies": {
         "@bridgething/client": "^0.12.1",
         "@bridgething/webapp-shared": "file:./webapp-shared",

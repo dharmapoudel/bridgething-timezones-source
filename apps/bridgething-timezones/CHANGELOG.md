@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.3
+
+- Portrait layout (480x800): the grid now uses a narrower label column and
+  six roomier hour columns instead of ten cramped ones, the footer hints are
+  shortened to a single line, and the timezone picker modal fits the narrower
+  screen. Landscape (800x480) is unchanged.
+
 ## 0.3.2
 
 - Fixed the app icon: back to the SVG Orbit icon. The 0.3.1 PNG rasterization
